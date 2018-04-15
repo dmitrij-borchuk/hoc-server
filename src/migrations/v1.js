@@ -1,5 +1,5 @@
 import R from 'ramda';
-import { UserModel } from '../utils/db';
+import { create } from '../controllers/users';
 
 const usersData = [
   { username: 'admin', email: 'admin@hour-of-code.com', password: 'admin' },
@@ -13,8 +13,7 @@ const usersData = [
   { username: 'Angela Walker', email: 'Mentor4@hour-of-code.com', password: 'mentor' },
 ];
 
-const createUser = R.bind(UserModel.create, UserModel);
 export default R.pipe(
-  R.curry(R.map)(createUser),
+  R.curry(R.map)(create),
   R.bind(Promise.all, Promise),
 ).bind(null, usersData);

@@ -24,6 +24,13 @@ export const UserModel = sequelize.define('user', {
   email: Sequelize.STRING,
   password: Sequelize.STRING,
 });
+UserModel.prototype.toJSON = function toJSON() {
+  const values = Object.assign({}, this.get());
+
+  delete values.password;
+  return values;
+};
+
 export const SystemModel = sequelize.define('system', {
   key: Sequelize.STRING,
   value: Sequelize.STRING,

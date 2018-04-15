@@ -21,6 +21,7 @@
     "joi": "^13.1.2",
     "jsonwebtoken": "^8.2.1",
     "nodemon": "^1.17.3",
+    "password-hash": "^1.2.2",
     "ramda": "^0.25.0",
     "sequelize": "^4.37.6",
     "sqlite3": "^4.0.0"
