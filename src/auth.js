@@ -5,19 +5,19 @@ import { getById } from './dal/users';
 // TODO: move to ENV
 const PRIVATE_KEY = 'privateKey';
 
-const validate = (request, decodedToken, callback) => {
-  const credentials = getById(decodedToken.accountId);
+const validate = async (decoded) => {
+  const user = await getById(decoded.accountId);
 
-  if (!credentials) {
-    return callback(null, false, credentials);
+  if (!user) {
+    return { isValid: false };
   }
 
-  return callback(null, true, credentials);
+  return { isValid: true };
 };
 
 const registerAuth = async (validateFunc, server) => {
   await server.register(authJwt);
-  server.auth.strategy('token', 'jwt', {
+  server.auth.strategy('jwt', 'jwt', {
     key: PRIVATE_KEY,
     validate: validateFunc,
     verifyOptions: {
@@ -25,6 +25,7 @@ const registerAuth = async (validateFunc, server) => {
       algorithms: ['HS256'],
     },
   });
+  server.auth.default('jwt');
 };
 
 export default R.curry(registerAuth)(validate);
