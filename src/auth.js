@@ -1,9 +1,6 @@
 import authJwt from 'hapi-auth-jwt2';
 import R from 'ramda';
-import { getById } from './dal/users';
-
-// TODO: move to ENV
-const PRIVATE_KEY = 'privateKey';
+import { getById } from './controllers/users';
 
 const validate = async (decoded) => {
   const user = await getById(decoded.accountId);
@@ -18,7 +15,7 @@ const validate = async (decoded) => {
 const registerAuth = async (validateFunc, server) => {
   await server.register(authJwt);
   server.auth.strategy('jwt', 'jwt', {
-    key: PRIVATE_KEY,
+    key: process.env.JWT_SECRET,
     validate: validateFunc,
     verifyOptions: {
       // only allow HS256 algorithm

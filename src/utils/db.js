@@ -24,6 +24,10 @@ export const UserModel = sequelize.define('user', {
   email: Sequelize.STRING,
   password: Sequelize.STRING,
 });
+export const SystemModel = sequelize.define('system', {
+  key: Sequelize.STRING,
+  value: Sequelize.STRING,
+});
 
 export const syncModels = R.bind(sequelize.sync, sequelize);
 
