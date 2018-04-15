@@ -3,7 +3,7 @@ import R from 'ramda';
 import { getById } from './controllers/users';
 
 const validate = async (decoded) => {
-  const user = await getById(decoded.accountId);
+  const user = await getById(decoded.id);
 
   if (!user) {
     return { isValid: false };

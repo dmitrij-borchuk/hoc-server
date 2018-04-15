@@ -2,7 +2,10 @@ import JWT from 'jsonwebtoken';
 import passwordHash from 'password-hash';
 import Boom from 'boom';
 import Joi from 'joi';
-import { getByEmail } from '../controllers/users';
+import {
+  getByEmail,
+  getAll,
+} from '../controllers/users';
 
 export default (server) => {
   const BASE_PATH = '/api';
@@ -39,5 +42,12 @@ export default (server) => {
       }
       return Boom.unauthorized();
     },
+  });
+
+  // GET users
+  server.route({
+    method: 'GET',
+    path: `${BASE_PATH}/users`,
+    handler: async () => getAll(),
   });
 };

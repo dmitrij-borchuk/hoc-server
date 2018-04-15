@@ -16,3 +16,7 @@ export const create = R.pipe(
   }),
   R.bind(UserModel.create, UserModel),
 );
+
+export const getAll = R.pipe(
+  R.bind(UserModel.findAll, UserModel),
+);

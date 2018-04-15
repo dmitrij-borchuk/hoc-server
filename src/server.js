@@ -26,20 +26,6 @@ export default async () => {
 
     // Add the route
     routes(server);
-    server.route({
-      method: 'GET',
-      path: '/hello',
-      handler: () => 'hello world',
-      config: {
-        auth: false,
-      },
-    });
-
-    server.route({
-      method: 'GET',
-      path: '/sec',
-      handler: () => 'hello world secured',
-    });
 
     await db.sync();
 
