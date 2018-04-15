@@ -1,28 +1,38 @@
 import Hapi from 'hapi';
+import auth from './auth';
 
-// Create a server with a host and port
-const server = Hapi.server({
-  host: 'localhost',
-  port: 8000,
-});
-
-// Add the route
-server.route({
-  method: 'GET',
-  path: '/hello',
-  handler: () => 'hello world',
-});
 
 // Start the server
-const start = async () => {
+export default async () => {
   try {
+    // Create a server with a host and port
+    const server = Hapi.server({
+      host: 'localhost',
+      port: 8000,
+    });
+
+    await auth(server);
+
+    // Add the route
+    server.route({
+      method: 'GET',
+      path: '/hello',
+      handler: () => 'hello world',
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/sec',
+      config: {
+        auth: 'token',
+        handler: () => 'hello world secured',
+      },
+    });
     await server.start();
+
+    console.log('Server running at:', server.info.uri);
   } catch (err) {
     console.error(err);
     process.exit(1);
   }
-
-  console.log('Server running at:', server.info.uri);
 };
-
-export default start;
