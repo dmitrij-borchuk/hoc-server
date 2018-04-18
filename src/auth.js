@@ -21,6 +21,7 @@ const registerAuth = async (validateFunc, server) => {
       // only allow HS256 algorithm
       algorithms: ['HS256'],
     },
+    urlKey: 'token',
   });
   server.auth.default('jwt');
 };

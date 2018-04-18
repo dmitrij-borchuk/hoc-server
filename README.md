@@ -24,3 +24,6 @@ There are several options for generating secret keys. The easiest way is to run 
 ```
 node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
 ```
+
+### GraphQL doc
+`/graphiql?token={yourJwtToken}`
