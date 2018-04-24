@@ -1,7 +1,9 @@
 import v1 from './v1';
+import v2 from './v2';
 
 const migrations = [
   v1,
+  v2,
 ];
 
 // ([Function], Number) -> Number

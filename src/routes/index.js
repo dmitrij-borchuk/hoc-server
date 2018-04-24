@@ -8,10 +8,11 @@ export default async (server) => {
   await server.register({
     plugin: graphqlHapi,
     options: {
-      path: '/graphql',
-      graphqlOptions: {
+      path: '/api/graphql',
+      graphqlOptions: async request => ({
         schema,
-      },
+        context: request,
+      }),
       route: {
         cors: true,
       },
@@ -23,7 +24,7 @@ export default async (server) => {
     options: {
       path: '/graphiql',
       graphiqlOptions: {
-        endpointURL: '/graphql',
+        endpointURL: '/api/graphql',
       },
       route: {
         cors: true,

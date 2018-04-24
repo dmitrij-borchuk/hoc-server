@@ -1,3 +1,4 @@
+import R, { __ as _ } from 'ramda';
 import {
   graphql,
   GraphQLSchema,
@@ -6,6 +7,8 @@ import {
   GraphQLList,
 } from 'graphql';
 import user, { usersResolve } from './user';
+import { ACTIONS } from '../constants';
+import acl from '../acl';
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -13,7 +16,22 @@ export const schema = new GraphQLSchema({
     fields: {
       users: {
         type: GraphQLList(user),
-        resolve: usersResolve,
+        resolve(...rest) {
+          const context = rest[2];
+          const { roles } = context.auth.credentials;
+          const actions = R.pipe(
+            R.map(R.path(_, acl)),
+            R.reduce(R.concat, []),
+            R.uniq,
+          )(roles);
+
+          const hasAccess = R.contains(ACTIONS.SEE_ALL_USERS, actions);
+
+          if (hasAccess) {
+            return usersResolve();
+          }
+          throw new Error('Access denied');
+        },
       },
       hello: {
         type: GraphQLString,

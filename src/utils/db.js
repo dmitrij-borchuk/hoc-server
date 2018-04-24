@@ -1,5 +1,8 @@
 import Sequelize from 'sequelize';
-import R from 'ramda';
+import roleModelCreator from '../models/role';
+import userModelCreator from '../models/user';
+import systemModelCreator from '../models/system';
+import roleToUserModelCreator from '../models/roleToUser';
 
 const USERNAME = 'username';
 const PASSWORD = 'password';
@@ -19,23 +22,9 @@ const sequelize = new Sequelize('database', USERNAME, PASSWORD, {
   storage: 'db/database.sqlite',
 });
 
-export const UserModel = sequelize.define('user', {
-  username: Sequelize.STRING,
-  email: Sequelize.STRING,
-  password: Sequelize.STRING,
-});
-UserModel.prototype.toJSON = function toJSON() {
-  const values = Object.assign({}, this.get());
-
-  delete values.password;
-  return values;
-};
-
-export const SystemModel = sequelize.define('system', {
-  key: Sequelize.STRING,
-  value: Sequelize.STRING,
-});
-
-export const syncModels = R.bind(sequelize.sync, sequelize);
+export const UserModel = userModelCreator(sequelize);
+export const SystemModel = systemModelCreator(sequelize);
+export const RoleModel = roleModelCreator(sequelize);
+export const RoleToUserModel = roleToUserModelCreator(sequelize);
 
 export default sequelize;
