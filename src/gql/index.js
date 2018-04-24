@@ -20,6 +20,7 @@ export const schema = new GraphQLSchema({
           const context = rest[2];
           const { roles } = context.auth.credentials;
           const actions = R.pipe(
+            role => [role],
             R.map(R.path(_, acl)),
             R.reduce(R.concat, []),
             R.uniq,
