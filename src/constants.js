@@ -8,3 +8,7 @@ export const ROLES = {
 export const ACTIONS = {
   SEE_ALL_USERS: 'SEE_ALL_USERS',
 };
+
+export const SYSTEM_KEYS = {
+  INITIATED: 'initiated',
+};
