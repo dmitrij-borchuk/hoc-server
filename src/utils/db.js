@@ -2,7 +2,6 @@ import Sequelize from 'sequelize';
 import roleModelCreator from '../models/role';
 import userModelCreator from '../models/user';
 import systemModelCreator from '../models/system';
-import roleToUserModelCreator from '../models/roleToUser';
 
 // TODO: remove from sourecede
 const USERNAME = 'username';
@@ -28,6 +27,8 @@ const sequelize = new Sequelize('database', USERNAME, PASSWORD, {
 export const UserModel = userModelCreator(sequelize);
 export const SystemModel = systemModelCreator(sequelize);
 export const RoleModel = roleModelCreator(sequelize);
-export const RoleToUserModel = roleToUserModelCreator(sequelize);
+
+RoleModel.belongsToMany(UserModel, { as: 'users', through: 'releUsers' });
+UserModel.belongsToMany(RoleModel, { as: 'roles', through: 'userRoles' });
 
 export default sequelize;

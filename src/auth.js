@@ -1,9 +1,9 @@
 import authJwt from 'hapi-auth-jwt2';
 import R from 'ramda';
-import { getById } from './controllers/users';
+import { getUserById } from './controllers/users';
 
 const validate = async (decoded) => {
-  const user = await getById(decoded.id);
+  const user = await getUserById(decoded.id);
 
   if (!user) {
     return { isValid: false };
