@@ -17,6 +17,8 @@ Create file `.env` with such content:
 ```
 EXAMPLE_VAR=value
 JWT_SECRET=jwtSecretString
+ADMIN=<system administrator's email>
+ADMIN_PASSWORD=<system administrator's password>
 ```
 
 ### Generating Your Secret Key

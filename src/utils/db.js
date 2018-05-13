@@ -4,12 +4,15 @@ import userModelCreator from '../models/user';
 import systemModelCreator from '../models/system';
 import roleToUserModelCreator from '../models/roleToUser';
 
+// TODO: remove from sourecede
 const USERNAME = 'username';
 const PASSWORD = 'password';
 
 const sequelize = new Sequelize('database', USERNAME, PASSWORD, {
   host: 'localhost',
   dialect: 'sqlite',
+
+  logging: false,
 
   pool: {
     max: 5,

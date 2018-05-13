@@ -12,3 +12,5 @@ export const ACTIONS = {
 export const SYSTEM_KEYS = {
   INITIATED: 'initiated',
 };
+
+export const FIRST_ADMIN_USERNAME = 'Sys-admin';

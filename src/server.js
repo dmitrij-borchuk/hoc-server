@@ -9,6 +9,8 @@ import {
 } from './controllers/system';
 import routes from './routes';
 import migration from './migrations';
+import { init } from './controllers/common';
+import { FIRST_ADMIN_USERNAME } from './constants';
 
 // set env variables from `.env` file
 dotenv.config();
@@ -50,6 +52,12 @@ export default async () => {
       console.error(`    ${error.message}`);
       throw error;
     }
+
+    init({
+      email: process.env.ADMIN,
+      username: FIRST_ADMIN_USERNAME,
+      password: process.env.ADMIN_PASSWORD,
+    });
 
     // Start the server
     await server.start();
