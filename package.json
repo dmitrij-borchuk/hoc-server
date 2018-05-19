@@ -1,4 +1,7 @@
 {
+  "name": "hoc-server",
+  "version": "0.1.0",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d dist",
