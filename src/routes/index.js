@@ -1,39 +1,9 @@
-import { graphqlHapi, graphiqlHapi } from 'apollo-server-hapi';
 import Joi from 'joi';
 import users from './users';
 import { init } from '../controllers/common';
-import { schema } from '../gql';
 
 export default async (server) => {
   users(server);
-
-  await server.register({
-    plugin: graphqlHapi,
-    options: {
-      path: '/api/graphql',
-      graphqlOptions: async request => ({
-        schema,
-        context: request,
-      }),
-      route: {
-        cors: true,
-      },
-    },
-  });
-
-  await server.register({
-    plugin: graphiqlHapi,
-    options: {
-      path: '/graphiql',
-      graphiqlOptions: {
-        endpointURL: '/api/graphql',
-      },
-      route: {
-        cors: true,
-        auth: false,
-      },
-    },
-  });
 
   server.route({
     method: 'GET',
