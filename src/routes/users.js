@@ -73,6 +73,10 @@ export default (server) => {
           const boomError = Boom.badRequest(REQUEST_ERRORS.VALIDATION_ERROR);
           boomError.output.payload.data = error.errors;
           return boomError;
+        } else if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR_CONFLICT) {
+          const boomError = Boom.conflict(REQUEST_ERRORS.VALIDATION_ERROR_CONFLICT);
+          boomError.output.payload.data = error.errors;
+          return boomError;
         }
         return error;
       }
