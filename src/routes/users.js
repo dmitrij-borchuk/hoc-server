@@ -6,8 +6,10 @@ import Joi from 'joi';
 import {
   getByEmail,
   getAll,
+  createUser,
 } from '../controllers/users';
 import { getUserRoles } from '../controllers/roles';
+import { SEQUELIZE_ERRORS, REQUEST_ERRORS } from '../constants';
 
 export default (server) => {
   const BASE_PATH = '/api';
@@ -55,6 +57,25 @@ export default (server) => {
   server.route({
     method: 'GET',
     path: `${BASE_PATH}/users`,
-    handler: async () => getAll(),
+    handler: () => getAll(),
+  });
+
+  // POST users
+  server.route({
+    method: 'POST',
+    path: `${BASE_PATH}/users`,
+    handler: async (req) => {
+      try {
+        const data = req.payload;
+        return await createUser(data);
+      } catch (error) {
+        if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR) {
+          const boomError = Boom.badRequest(REQUEST_ERRORS.VALIDATION_ERROR);
+          boomError.output.payload.data = error.errors;
+          return boomError;
+        }
+        return error;
+      }
+    },
   });
 };

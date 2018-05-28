@@ -14,3 +14,11 @@ export const SYSTEM_KEYS = {
 };
 
 export const FIRST_ADMIN_USERNAME = 'Sys-admin';
+
+export const SEQUELIZE_ERRORS = {
+  VALIDATION_ERROR: 'SequelizeValidationError',
+};
+
+export const REQUEST_ERRORS = {
+  VALIDATION_ERROR: 'ValidationError',
+};
