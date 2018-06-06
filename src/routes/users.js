@@ -6,8 +6,12 @@ import Joi from 'joi';
 import {
   getByEmail,
   getAll,
+  editUser,
 } from '../controllers/users';
 import { getUserRoles } from '../controllers/roles';
+import createUserTpl from '../communication/templates/createUser';
+import { createToken } from '../utils';
+import sendEmail from '../communication/email';
 
 export default (server) => {
   const BASE_PATH = '/api';
@@ -56,5 +60,64 @@ export default (server) => {
     method: 'GET',
     path: `${BASE_PATH}/users`,
     handler: async () => getAll(),
+  });
+
+  // POST users
+  server.route({
+    method: 'POST',
+    path: `${BASE_PATH}/users`,
+    handler: async (req) => {
+      try {
+        const data = req.payload;
+        const token = createToken();
+        const userData = {
+          ...data,
+          resetToken: token,
+        };
+        const user = await createUser(userData);
+        const to = user.email;
+        const text = createUserTpl({
+          email: user.email,
+          token: user.resetToken,
+        });
+        sendEmail(to, text);
+        return user;
+      } catch (error) {
+        if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR) {
+          const boomError = Boom.badRequest(REQUEST_ERRORS.VALIDATION_ERROR);
+          boomError.output.payload.data = error.errors;
+          return boomError;
+        } else if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR_CONFLICT) {
+          const boomError = Boom.conflict(REQUEST_ERRORS.VALIDATION_ERROR_CONFLICT);
+          boomError.output.payload.data = error.errors;
+          return boomError;
+        }
+        return error;
+      }
+    },
+  });
+
+  // PUT users
+  server.route({
+    method: 'PUT',
+    path: `${BASE_PATH}/users/{id}`,
+    handler: async (req) => {
+      const { id } = req.params;
+      const data = req.payload;
+      try {
+        return await editUser(id, data);
+      } catch (error) {
+        if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR) {
+          const boomError = Boom.badRequest(REQUEST_ERRORS.VALIDATION_ERROR);
+          boomError.output.payload.data = error.errors;
+          return boomError;
+        } else if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR_CONFLICT) {
+          const boomError = Boom.conflict(REQUEST_ERRORS.VALIDATION_ERROR_CONFLICT);
+          boomError.output.payload.data = error.errors;
+          return boomError;
+        }
+        return error;
+      }
+    },
   });
 };

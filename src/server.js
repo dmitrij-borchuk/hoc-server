@@ -10,7 +10,8 @@ import {
 import routes from './routes';
 import migration from './migrations';
 import { init } from './controllers/common';
-import { FIRST_ADMIN_USERNAME } from './constants';
+import { FIRST_ADMIN_USERNAME, ENVIRONMENT } from './constants';
+import fake from './utils/fakeData';
 
 // set env variables from `.env` file
 dotenv.config();
@@ -58,6 +59,11 @@ export default async () => {
       username: FIRST_ADMIN_USERNAME,
       password: process.env.ADMIN_PASSWORD,
     });
+
+
+    if (process.env.environment === ENVIRONMENT.DEVELOP) {
+      fake();
+    }
 
     // Start the server
     await server.start();

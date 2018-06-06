@@ -1,13 +1,18 @@
 import Sequelize from 'sequelize';
+import dotenv from 'dotenv';
 import roleModelCreator from '../models/role';
 import userModelCreator from '../models/user';
 import systemModelCreator from '../models/system';
+import { ENVIRONMENT } from '../constants';
+
+// set env variables from `.env` file
+dotenv.config();
 
 // TODO: remove from sourecede
 const USERNAME = 'username';
 const PASSWORD = 'password';
 
-const sequelize = new Sequelize('database', USERNAME, PASSWORD, {
+const sequelizeOptions = {
   host: 'localhost',
   dialect: 'sqlite',
 
@@ -19,10 +24,13 @@ const sequelize = new Sequelize('database', USERNAME, PASSWORD, {
     acquire: 30000,
     idle: 10000,
   },
-
+};
+if (process.env.environment !== ENVIRONMENT.DEVELOP) {
   // SQLite only
-  storage: 'db/database.sqlite',
-});
+  sequelizeOptions.storage = 'db/database.sqlite';
+}
+
+const sequelize = new Sequelize('database', USERNAME, PASSWORD, sequelizeOptions);
 
 export const UserModel = userModelCreator(sequelize);
 export const SystemModel = systemModelCreator(sequelize);

@@ -19,7 +19,9 @@ EXAMPLE_VAR=value
 JWT_SECRET=jwtSecretString
 ADMIN=<system administrator's email>
 ADMIN_PASSWORD=<system administrator's password>
+environment=develop // if you want to run in dev mode
 ```
+Dev mode will generate fake data and run db in mamory
 
 ### Generating Your Secret Key
 There are several options for generating secret keys. The easiest way is to run node's crypto hash in your terminal:
