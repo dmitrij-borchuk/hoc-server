@@ -7,11 +7,13 @@ import {
   getByEmail,
   getAll,
   editUser,
+  createUser,
 } from '../controllers/users';
 import { getUserRoles } from '../controllers/roles';
 import createUserTpl from '../communication/templates/createUser';
 import { createToken } from '../utils';
 import sendEmail from '../communication/email';
+import { SEQUELIZE_ERRORS, REQUEST_ERRORS } from '../constants';
 
 export default (server) => {
   const BASE_PATH = '/api';

@@ -5,7 +5,13 @@
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d dist",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "lint": "eslint ./src"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run lint"
+    }
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -14,6 +20,7 @@
     "faker": "^4.1.0",
     "hapi": "^17.3.1",
     "hapi-auth-jwt2": "^8.1.0",
+    "husky": "^1.0.0-rc.8",
     "joi": "^13.1.2",
     "jsonwebtoken": "^8.2.1",
     "password-hash": "^1.2.2",
