@@ -9,8 +9,7 @@ import {
 } from './controllers/system';
 import routes from './routes';
 import migration from './migrations';
-import { init } from './controllers/common';
-import { FIRST_ADMIN_USERNAME, ENVIRONMENT } from './constants';
+import { ENVIRONMENT } from './constants';
 import fake from './utils/fakeData';
 
 // set env variables from `.env` file
@@ -53,13 +52,6 @@ export default async () => {
       console.error(`    ${error.message}`);
       throw error;
     }
-
-    init({
-      email: process.env.ADMIN,
-      username: FIRST_ADMIN_USERNAME,
-      password: process.env.ADMIN_PASSWORD,
-    });
-
 
     if (process.env.environment === ENVIRONMENT.DEVELOP) {
       fake();

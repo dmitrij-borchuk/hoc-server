@@ -1,21 +1,17 @@
-import R from 'ramda';
-import { create as createRole, addRoleToUser } from '../controllers/roles';
-import { getByEmail } from '../controllers/users';
-import { ROLES } from '../constants';
-
-const data = [
-  { name: ROLES.SYSTEM_ADMIN },
-  { name: ROLES.ADMIN },
-  { name: ROLES.TEACHER },
-  { name: ROLES.MENTOR },
-];
+import passwordHash from 'password-hash';
+import env from '../utils/env';
+import { ROLES, FIRST_ADMIN_USERNAME } from '../constants';
+import { createUser } from '../controllers/users';
+import { getRole } from '../controllers/roles';
 
 export default async () => {
-  const createdRoles = await Promise.all(R.map(createRole, data));
-  const admin = await getByEmail('admin@hour-of-code.com');
-
-  return addRoleToUser({
-    user: admin.id,
-    role: createdRoles[0].id,
+  const user = await createUser({
+    email: env.ADMIN,
+    username: FIRST_ADMIN_USERNAME,
+    password: passwordHash.generate(env.ADMIN_PASSWORD),
   });
+
+  const adminRole = await getRole(ROLES.SYSTEM_ADMIN);
+
+  await user.addRole(adminRole);
 };

@@ -1,7 +1,12 @@
-import { set } from '../controllers/system';
-import { SYSTEM_KEYS } from '../constants';
+import R from 'ramda';
+import { createRole } from '../controllers/roles';
+import { ROLES } from '../constants';
 
-export default () => set({
-  key: SYSTEM_KEYS.INITIATED,
-  value: 0,
-});
+const data = [
+  { name: ROLES.SYSTEM_ADMIN },
+  { name: ROLES.ADMIN },
+  { name: ROLES.TEACHER },
+  { name: ROLES.MENTOR },
+];
+
+export default async () => Promise.all(R.map(createRole, data));
