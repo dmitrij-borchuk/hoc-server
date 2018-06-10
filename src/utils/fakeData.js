@@ -1,4 +1,5 @@
 import faker from 'faker';
+import passwordHash from 'password-hash';
 import { createUser } from '../controllers/users';
 
 export default () => {
@@ -12,6 +13,13 @@ export default () => {
   for (let i = 0; i < usersToGenerate; i += 1) {
     usersData.push(generateUser());
   }
+
+  usersData.push({
+    username: 'mentor',
+    email: 'mentor@hoc.com',
+    password: passwordHash.generate('123456'),
+  });
+
   return usersData.reduce(
     (acc, item) => acc.then(result => createUser(item).then(user => [...result, user])),
     Promise.resolve([]),
