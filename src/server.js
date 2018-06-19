@@ -48,8 +48,10 @@ export default async () => {
         value: `${newVersion}`,
       });
     } catch (error) {
+      /* eslint-disable no-console */
       console.error('    Error while migration');
       console.error(`    ${error.message}`);
+      /* eslint-enable no-console */
       throw error;
     }
 
@@ -59,10 +61,12 @@ export default async () => {
 
     // Start the server
     await server.start();
+    // eslint-disable-next-line no-console
     console.log('Server running at:', server.info.uri);
 
     return server;
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
     return process.exit(1);
   }

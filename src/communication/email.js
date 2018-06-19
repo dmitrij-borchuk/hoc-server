@@ -1,6 +1,7 @@
 // TODO: it is a stub
 
 export default (to, text) => {
+  /* eslint-disable no-console */
   console.log('');
   console.log('**** Email stub ********');
 
@@ -9,4 +10,5 @@ export default (to, text) => {
 
   console.log('**** Email stub end ****');
   console.log('');
+  /* eslint-enable no-console */
 };

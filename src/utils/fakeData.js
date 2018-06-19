@@ -47,7 +47,7 @@ const addGroups = async () => {
   for (let i = 0; i < itemsToGenerate; i += 1) {
     groupsData.push({
       name: `Group #${i}`,
-      venueId: Math.round(Math.random() * (venues.length - 1)),
+      venueId: Math.round(Math.random() * (venues.length - 1)) + 1,
     });
   }
   return groupsData.reduce(

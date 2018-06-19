@@ -43,6 +43,10 @@ export const GroupModel = groupModelCreator(sequelize);
 RoleModel.belongsToMany(UserModel, { as: 'users', through: 'releUsers' });
 UserModel.belongsToMany(RoleModel, { as: 'roles', through: 'userRoles' });
 GroupModel.belongsTo(VenueModel, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+GroupModel.belongsTo(UserModel, {
+  foreignKey: 'assignee',
+  as: 'assigneeFull',
+});
 VenueModel.hasMany(GroupModel);
 
 export default sequelize;
