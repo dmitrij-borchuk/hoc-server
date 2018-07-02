@@ -22,6 +22,12 @@ const addUsers = () => {
     password: passwordHash.generate('123456'),
   });
 
+  usersData.push({
+    username: 'admin',
+    email: 'admin@hoc.com',
+    password: passwordHash.generate('123456'),
+  });
+
   return usersData.reduce(
     (acc, item) => acc.then(result => createUser(item).then(user => [...result, user])),
     Promise.resolve([]),
