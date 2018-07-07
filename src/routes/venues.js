@@ -1,9 +1,19 @@
 import Boom from 'boom';
-import { createVenue } from '../controllers/venues';
+import {
+  createVenue,
+  getAllVenues,
+} from '../controllers/venues';
 import { SEQUELIZE_ERRORS, REQUEST_ERRORS } from '../constants';
 
 export default (server) => {
   const BASE_PATH = '/api';
+
+  // GET venues
+  server.route({
+    method: 'GET',
+    path: `${BASE_PATH}/venues`,
+    handler: async () => getAllVenues(),
+  });
 
   // POST venue
   server.route({
