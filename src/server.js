@@ -9,14 +9,39 @@ import {
 } from './controllers/system';
 import routes from './routes';
 import migration from './migrations';
-import { ENVIRONMENT } from './constants';
 import fake from './utils/fakeData';
 
 // set env variables from `.env` file
 dotenv.config();
 
-export default async () => {
+const migrateDB = async () => {
   const DB_VERSION_KEY = 'dbversion';
+  let dbVersion = await getSystemSettingByKey(DB_VERSION_KEY);
+  if (!dbVersion) {
+    await setSystemSetting({
+      key: DB_VERSION_KEY,
+      value: '0',
+    });
+    dbVersion = await getSystemSettingByKey(DB_VERSION_KEY);
+  }
+
+  try {
+    const newVersion = await migration(dbVersion.value);
+    await setSystemSetting({
+      key: DB_VERSION_KEY,
+      value: `${newVersion}`,
+    });
+  } catch (error) {
+    /* eslint-disable no-console */
+    console.error('    Error while migration');
+    console.error('    Version', dbVersion.value);
+    console.error(`    ${error.message}`);
+    /* eslint-enable no-console */
+    throw error;
+  }
+};
+
+export default async () => {
   try {
     // Create a server with a host and port
     const server = Hapi.server({
@@ -31,31 +56,9 @@ export default async () => {
 
     await db.sync();
 
-    // Migrations
-    let dbVersion = await getSystemSettingByKey(DB_VERSION_KEY);
-    if (!dbVersion) {
-      await setSystemSetting({
-        key: DB_VERSION_KEY,
-        value: '0',
-      });
-      dbVersion = await getSystemSettingByKey(DB_VERSION_KEY);
-    }
+    await migrateDB();
 
-    try {
-      const newVersion = await migration(dbVersion.value);
-      await setSystemSetting({
-        key: DB_VERSION_KEY,
-        value: `${newVersion}`,
-      });
-    } catch (error) {
-      /* eslint-disable no-console */
-      console.error('    Error while migration');
-      console.error(`    ${error.message}`);
-      /* eslint-enable no-console */
-      throw error;
-    }
-
-    if (process.env.environment === ENVIRONMENT.DEVELOP) {
+    if (process.env.WITH_MOCKS) {
       fake();
     }
 

@@ -4,6 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
+    "dev-mock": "cross-env WITH_MOCKS=1 nodemon src/index.js --exec babel-node",
     "build": "babel src -d dist",
     "start": "node dist/index.js",
     "lint": "eslint ./src"
@@ -16,6 +17,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "boom": "^7.2.0",
+    "cross-env": "^5.2.0",
     "dotenv": "^5.0.1",
     "faker": "^4.1.0",
     "hapi": "^17.3.1",

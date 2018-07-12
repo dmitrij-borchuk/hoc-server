@@ -2,6 +2,8 @@ import R from 'ramda';
 import { RoleModel } from '../utils/db';
 import { getUserById } from './users';
 
+export const getAllRoles = R.bind(RoleModel.findAll, RoleModel);
+
 export const createRole = R.bind(RoleModel.create, RoleModel);
 
 export const getRole = R.pipe(

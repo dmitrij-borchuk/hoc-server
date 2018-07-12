@@ -13,7 +13,14 @@ import { getUserRoles } from '../controllers/roles';
 import createUserTpl from '../communication/templates/createUser';
 import { createToken } from '../utils';
 import sendEmail from '../communication/email';
-import { SEQUELIZE_ERRORS, REQUEST_ERRORS } from '../constants';
+import {
+  JoiValidationError,
+  parseValidationError,
+} from '../utils/errors';
+import {
+  SEQUELIZE_ERRORS,
+  REQUEST_ERRORS,
+} from '../constants';
 
 export default (server) => {
   const BASE_PATH = '/api';
@@ -71,6 +78,14 @@ export default (server) => {
     handler: async (req) => {
       try {
         const data = req.payload;
+        const validationResult = Joi.validate(data, {
+          roles: Joi.array().min(1).required(),
+          email: Joi.string().email().required(),
+          username: Joi.string().required(),
+        });
+        if (validationResult.error) {
+          throw new JoiValidationError(validationResult.error.details);
+        }
         const token = createToken();
         const userData = {
           ...data,
@@ -85,16 +100,7 @@ export default (server) => {
         sendEmail(to, text);
         return user;
       } catch (error) {
-        if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR) {
-          const boomError = Boom.badRequest(REQUEST_ERRORS.VALIDATION_ERROR);
-          boomError.output.payload.data = error.errors;
-          return boomError;
-        } else if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR_CONFLICT) {
-          const boomError = Boom.conflict(REQUEST_ERRORS.VALIDATION_ERROR_CONFLICT);
-          boomError.output.payload.data = error.errors;
-          return boomError;
-        }
-        return error;
+        return parseValidationError(error);
       }
     },
   });

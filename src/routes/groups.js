@@ -5,6 +5,7 @@ import {
   editGroup,
   createGroup,
 } from '../controllers/groups';
+import { parseValidationError } from '../utils/errors';
 import { SEQUELIZE_ERRORS, REQUEST_ERRORS } from '../constants';
 
 export default (server) => {
@@ -32,16 +33,7 @@ export default (server) => {
       try {
         return await createGroup(req.payload);
       } catch (error) {
-        if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR) {
-          const boomError = Boom.badRequest(REQUEST_ERRORS.VALIDATION_ERROR);
-          boomError.output.payload.data = error.errors;
-          return boomError;
-        } else if (error.name === SEQUELIZE_ERRORS.VALIDATION_ERROR_CONFLICT) {
-          const boomError = Boom.conflict(REQUEST_ERRORS.VALIDATION_ERROR_CONFLICT);
-          boomError.output.payload.data = error.errors;
-          return boomError;
-        }
-        return error;
+        return parseValidationError(error);
       }
     },
   });

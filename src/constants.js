@@ -20,6 +20,10 @@ export const SEQUELIZE_ERRORS = {
   VALIDATION_ERROR_CONFLICT: 'SequelizeUniqueConstraintError',
 };
 
+export const JOI_ERRORS = {
+  VALIDATION_ERROR: 'ValidationError',
+};
+
 export const REQUEST_ERRORS = {
   VALIDATION_ERROR: 'ValidationError',
   VALIDATION_ERROR_CONFLICT: 'Conflict',

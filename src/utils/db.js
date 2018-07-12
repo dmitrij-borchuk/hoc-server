@@ -5,7 +5,6 @@ import userModelCreator from '../models/user';
 import systemModelCreator from '../models/system';
 import venueModelCreator from '../models/venue';
 import groupModelCreator from '../models/group';
-import { ENVIRONMENT } from '../constants';
 
 // set env variables from `.env` file
 dotenv.config();
@@ -27,7 +26,7 @@ const sequelizeOptions = {
     idle: 10000,
   },
 };
-if (process.env.environment !== ENVIRONMENT.DEVELOP) {
+if (!process.env.WITH_MOCKS) {
   // SQLite only
   sequelizeOptions.storage = 'db/database.sqlite';
 }
