@@ -1,4 +1,5 @@
 import Boom from 'boom';
+import Joi from 'joi';
 import {
   SEQUELIZE_ERRORS,
   REQUEST_ERRORS,
@@ -38,4 +39,12 @@ export const parseValidationError = (error) => {
     return boomError;
   }
   return error;
+};
+
+export const joiValidateThrowable = (data, schema) => {
+  const validationResult = Joi.validate(data, schema);
+  if (validationResult.error) {
+    throw new JoiValidationError(validationResult.error.details);
+  }
+  return validationResult;
 };
