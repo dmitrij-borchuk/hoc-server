@@ -114,7 +114,6 @@ export default (server) => {
           process.env.JWT_SECRET,
         );
       } catch (error) {
-        console.log('=-= error', error);
         return Boom.unauthorized();
       }
     },
